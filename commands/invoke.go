@@ -6,8 +6,10 @@ package commands
 import (
 	"encoding/hex"
 	"fmt"
+	controller "github.com/openfaas/faas-cli/func_controllers"
 	"io/ioutil"
 	"os"
+	"time"
 
 	"github.com/alexellis/hmac"
 	"github.com/openfaas/faas-cli/proxy"
@@ -108,9 +110,23 @@ func runInvoke(cmd *cobra.Command, args []string) error {
 		headers = append(headers, signedHeader)
 	}
 
-	response, err := proxy.InvokeFunction(gatewayAddress, functionName, &functionInput, contentType, query, headers, invokeAsync, httpMethod, tlsInsecure, functionInvokeNamespace)
-	if err != nil {
-		return err
+	var response *[]byte
+	if len(args) == 2 && args[0] == "sf" {
+		fmt.Println("<<<<<<<<< InitState")
+		start:= time.Now()
+		err = controller.InitState(args[1], gatewayAddress, functionName, &functionInput, contentType, query, headers, invokeAsync, httpMethod, tlsInsecure, functionInvokeNamespace)
+		t:= time.Now()
+		if err !=nil {
+			return err
+		}
+		fmt.Println("-----------------------------------")
+		fmt.Println("Time: ")
+		fmt.Println(t.Sub(start))
+	}else {
+		response, err = proxy.InvokeFunction(gatewayAddress, functionName, &functionInput, contentType, query, headers, invokeAsync, httpMethod, tlsInsecure, functionInvokeNamespace)
+		if err != nil {
+			return err
+		}
 	}
 
 	if response != nil {

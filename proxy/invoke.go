@@ -98,6 +98,8 @@ func InvokeFunction(gateway string, name string, bytesIn *[]byte, contentType st
 		}
 	}
 
+	//fmt.Println("########################")
+
 	return &resBytes, nil
 }
 
