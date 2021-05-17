@@ -1,0 +1,15 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:31112
+functions:
+  book-rental:
+    lang: python3-debian
+    handler: ./book-rental
+    image: 12111999/book-rental:latest
+    environment:
+      mongo_host: mongodb.default.svc.cluster.local:27017
+      write_debug: true
+      combine_output: false
+    secrets:
+    - mongo-db-password

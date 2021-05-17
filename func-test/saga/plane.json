@@ -1,0 +1,21 @@
+{
+  "StartFunction": "book-hotel",
+  "States":
+  	{
+	    "book-hotel": {
+	      "Type": "Task",
+	      "Resource": "book-hotel",
+	      "Next": "book-flight"
+	    },   
+	    "book-flight":{
+	      "Type": "Task",
+	      "Resource": "book-flight",
+	      "Next": "book-rental"
+	    },
+	    "book-rental":{
+	      "Type": "Task",
+	      "Resource": "book-rental",
+	      "End": true
+	    }
+	}
+}
